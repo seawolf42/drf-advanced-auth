@@ -12,7 +12,7 @@ Where possible, this module uses the existing functionality of Django and Django
 Install the package:
 
 ```bash
-$ pip install drf_advanced_auth
+$ pip install drf-advanced-auth
 ```
 
 Update your URLs by adding the `drf_advanced_auth` urls under whatever prefix you want, and another url named `password_reset_confirm` that you want users to be redirected to when they click the link in the password reset email:
