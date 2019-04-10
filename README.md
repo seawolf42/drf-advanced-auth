@@ -1,0 +1,59 @@
+# DRF Advanced Authentication
+
+[Django REST Framework](https://www.django-rest-framework.org/) provides just about everything needed to turn your Django app into a REST-based web application. One area that DRF lacks functionality is in account management, specifically all the non-happy path scenarios related to authentication, namely password changes and password resets. This module aims to simplify setting up a full auth subsystem for your REST application.
+
+Where possible, this module uses the existing functionality of Django and Django REST Framework, so that the integration is seamless and maintenance is simplified; for example, the login and logout views are those built-in to Django REST Framework, and the password reset mechanism is that built-in to Django simply exposed as a collection of endpoints.
+
+**Note:** This package is a work in progress (that's why it's not yet at version 1.0). I am active seeking contributions to help with making it more usable, see ["Contributing"](#contributing) below.
+
+
+## Installation
+
+Install the package:
+
+```bash
+$ pip install drf_advanced_auth
+```
+
+Add it to your URLs:
+
+```python
+urlpatterns = [
+    # url(r'^auth/', include('rest_framework.urls')),  <- replace this line
+    url(r'^auth/', include('drf_advanced_auth.urls', namespace='authentication')),  # <- with this line
+]
+```
+
+
+## Usage
+
+(IN PROGRESS)
+
+
+## Sample App
+
+You can see a sample app using these fields buy running the following:
+
+```bash
+$ python manage.py migrate
+$ python manage.py loaddata fixtures/base.json
+$ python manage.py runserver
+```
+
+This app has the following endpoints:
+
+* `/auth/login/`
+* `/auth/logout/`
+* `/auth/change_password/`
+* `/auth/reset_password_request/`
+* `/auth/reset_password_complete/`
+
+The username for the admin user is `admin`, and the password is `pass`.
+
+
+<a name="contributing"></a>
+## Contributing
+
+I am actively seeking contributions to this package. Check the "Issues" section of the repository for my current hit list.
+
+If you have suggestions for other features I am open to hearing them. Use the "Issues" section of the repository to start a conversation.
