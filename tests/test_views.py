@@ -112,7 +112,11 @@ class TestChangePasswordView(TestAuthViewBase):
     valid_password = 'abcdefghijklmnopqrstuvwxyz'
 
     def setUp(self):
-        self.payload = dict(password=self.valid_password, repeat_password=self.valid_password)
+        self.payload = dict(
+            current_password=self.password,
+            new_password=self.valid_password,
+            repeat_password=self.valid_password,
+        )
 
     def test_get(self):
         response = self.client.get(self.url, self.payload, format='json')
@@ -223,7 +227,7 @@ class TestAuthViewResetPasswordComplete(TestAuthViewResetPasswordBase):
     def _setup_user(self):
         super(TestAuthViewResetPasswordComplete, self)._setup_user(include_token=True)
         self.payload.update(dict(
-            password=self.valid_password,
+            new_password=self.valid_password,
             repeat_password=self.valid_password,
         ))
 

@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as ModelValidationError
 from rest_framework import serializers
@@ -18,14 +19,13 @@ class PasswordField(serializers.CharField):
 NullSerializer = serializers.Serializer
 
 
-class ChangePasswordSerializer(serializers.Serializer):
+class NewPasswordBase(serializers.Serializer):
 
-    password = PasswordField()
+    new_password = PasswordField()
     repeat_password = PasswordField()
 
-    def validate_password(self, value):
-        request = self.context.get('request', None)
-        user = request.user if request and hasattr(request, 'user') else None
+    def validate_new_password(self, value):
+        user = self.context['request'].user
         try:
             validate_password(value, user=user)
         except ModelValidationError as e:
@@ -33,13 +33,24 @@ class ChangePasswordSerializer(serializers.Serializer):
         return value
 
     def validate(self, data):
-        if data['repeat_password'] != data['password']:
+        if data['repeat_password'] != data['new_password']:
             raise serializers.ValidationError('passwords mismatch')
         return data
 
+
+class ChangePasswordSerializer(NewPasswordBase):
+
+    current_password = PasswordField()
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not authenticate(username=user.username, password=value):
+            raise serializers.ValidationError('current password incorrect')
+        return value
+
     def save(self):
         user = self.context['request'].user
-        user.set_password(self.data['password'])
+        user.set_password(self.data['new_password'])
         user.save()
 
 
@@ -49,7 +60,7 @@ class LoginSerializer(serializers.Serializer):
     password = PasswordField()
 
 
-class ResetPasswordCompleteSerializer(ChangePasswordSerializer):
+class ResetPasswordCompleteSerializer(NewPasswordBase):
 
     uidb64 = serializers.CharField()
     token = serializers.CharField()
@@ -64,7 +75,7 @@ class ResetPasswordCompleteSerializer(ChangePasswordSerializer):
 
     def save(self):
         user = self.user
-        user.set_password(self.data['password'])
+        user.set_password(self.data['new_password'])
         user.save()
 
 
