@@ -2,7 +2,12 @@
 
 [Django REST Framework](https://www.django-rest-framework.org/) provides just about everything needed to turn your Django app into a REST-based web application. One area that DRF lacks functionality is in account management, specifically all the non-happy path scenarios related to authentication, namely password changes and password resets. This module aims to simplify setting up a full auth subsystem for your REST application.
 
-Where possible, this module uses the existing functionality of Django and Django REST Framework, so that the integration is seamless and maintenance is simplified; for example, the login and logout views are those built-in to Django REST Framework, and the password reset mechanism is that built-in to Django simply exposed as a collection of endpoints.
+The funcitons provided by this package are:
+
+* login: an endpoint for authenticating a user
+* logout: an endpoint for ending a user's session
+* change password: an endpoint for changing the password of a logged-in user
+* reset password: two endpoints that togehter can be used to reset the password of a logged-out user (lost password, etc)
 
 **Note:** This package is a work in progress (that's why it's not yet at version 1.0). I am active seeking contributions to help with making it more usable, see ["Contributing"](#contributing) below.
 
@@ -13,6 +18,16 @@ Install the package:
 
 ```bash
 $ pip install drf-advanced-auth
+```
+
+Add it to `INSTALLED_APPS`:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'drf_advanced_auth',
+    ...
+]
 ```
 
 Update your URLs by adding the `drf_advanced_auth` urls under whatever prefix you want, and another url named `password_reset_confirm` that you want users to be redirected to when they click the link in the password reset email:
