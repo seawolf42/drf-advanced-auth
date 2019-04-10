@@ -155,6 +155,15 @@ class TestChangePasswordView(TestAuthViewBase):
         self.assertEquals(response.status_code, 400)
         self.assertIsNotNone(authenticate(username=self.username, password=self.password))
 
+    @mock.patch('drf_advanced_auth.serializers.validate_password')
+    def test_user_not_logged_out_after_password_change(self, mock_validate_password):
+        self._setup_user()
+        self.assertIsNotNone(authenticate(username=self.username, password=self.password))
+        self.client.force_login(self.user)
+        self.client.post(self.url, self.payload, format='json')
+        response = self.client.get(TestLoginView.url)
+        self.assertEquals(response.status_code, 405)
+
 
 class TestAuthViewResetPasswordBase(TestAuthViewBase):
 

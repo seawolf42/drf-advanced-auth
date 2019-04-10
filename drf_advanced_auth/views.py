@@ -70,6 +70,7 @@ class AuthViewSet(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        login(request, request.user)
         return Response(_success_response)
 
     @action(methods=['get', 'post'], detail=False)
