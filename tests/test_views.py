@@ -164,7 +164,7 @@ class TestAuthViewResetPasswordBase(TestAuthViewBase):
     valid_password = 'abcdefghijklmnopqrstuvwxyz'
 
     def _setup_user(self, include_token=False):
-        super()._setup_user()
+        super(TestAuthViewResetPasswordBase, self)._setup_user()
         self.user.email = self.valid_email_address
         self.user.last_login = timezone.localize(datetime.datetime.now())
         self.user.save()
