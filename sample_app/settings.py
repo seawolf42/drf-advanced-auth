@@ -22,6 +22,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'sample_app',
 )
 
@@ -69,6 +70,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     )
 }
+
+
+LOGIN_REDIRECT_URL = 'index'
 
 
 DRF_ADVANCED_AUTH = {

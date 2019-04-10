@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail as Mail
 from django.core.exceptions import ValidationError as ModelValidationError
+from django.shortcuts import resolve_url
 from django.shortcuts import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -61,7 +62,7 @@ class TestLoginView(TestAuthViewBase):
         self.assertNotIn('_auth_user_id', self.client.session)
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(response._headers['location'][1], settings.LOGIN_REDIRECT_URL)
+        self.assertEquals(response._headers['location'][1], resolve_url(settings.LOGIN_REDIRECT_URL))
         self.assertIn('_auth_user_id', self.client.session)
 
     def test_invalid_username(self):
@@ -238,7 +239,7 @@ class TestAuthViewResetPasswordComplete(TestAuthViewResetPasswordBase):
         self._setup_user()
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(response._headers['location'][1], settings.LOGIN_REDIRECT_URL)
+        self.assertEquals(response._headers['location'][1], resolve_url(settings.LOGIN_REDIRECT_URL))
         self.assertIn('_auth_user_id', self.client.session)
 
     def test_invalid_token(self):

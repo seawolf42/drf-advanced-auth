@@ -1,0 +1,20 @@
+[
+{
+  "model": "sample_app.customuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$100000$7Rlx7DJbja14$VigHLzev1orbr1PB5hNnFztqLLR7xyPq9dUNypG9I0Q=",
+    "last_login": "2018-06-15T19:31:39.631Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "test@test.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2018-05-02T00:07:52.875Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
