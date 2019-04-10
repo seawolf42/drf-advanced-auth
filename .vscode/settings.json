@@ -1,0 +1,25 @@
+{
+    "python.pythonPath": "${workspaceRoot}/env/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Path": "${workspaceRoot}/env/bin/flake8",
+    "files.exclude": {
+      "build": true,
+      "dist": true,
+      "env": true,
+      "google-cloud-sdk": true,
+      "site/.storage": true,
+      "site/collected-static": true,
+      "**/*.egg-info": true,
+      "db.sqlite": true,
+      "**/._*": true,
+      "**/*.pyc": true,
+      "**/__pycache__": true
+    },
+    "search.exclude": {
+      "google-cloud-sdk": true,
+      "site/apps/webapps/static": true,
+      "site/site-packages": true,
+      "**/node_modules": true
+    }
+}

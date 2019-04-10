@@ -15,12 +15,12 @@ Install the package:
 $ pip install drf_advanced_auth
 ```
 
-Add it to your URLs:
+Update your URLs by adding the `drf_advanced_auth` urls under whatever prefix you want, and another url named `password_reset_confirm` that you want users to be redirected to when they click the link in the password reset email:
 
 ```python
 urlpatterns = [
-    # url(r'^auth/', include('rest_framework.urls')),  <- replace this line
-    url(r'^auth/', include('drf_advanced_auth.urls', namespace='authentication')),  # <- with this line
+    url(r'^auth/', include('drf_advanced_auth.urls', namespace='authentication')),
+    url(r'^password-reset/update/(?P<uidb64>.*)/(?P<token>.*)', FakeView.as_view(), name='password_reset_confirm'),
 ]
 ```
 
@@ -40,7 +40,7 @@ $ python manage.py loaddata fixtures/base.json
 $ python manage.py runserver
 ```
 
-This app has the following endpoints:
+This app has the following endpoints (assuming they are under the `auth` prefix as shown above):
 
 * `/auth/login/`
 * `/auth/logout/`
