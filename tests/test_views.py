@@ -14,7 +14,10 @@ from django.shortcuts import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.test import TestCase
+from rest_framework.serializers import ModelSerializer
 from rest_framework.test import APIClient
+
+from drf_advanced_auth import conf
 
 from .utils import strings
 
@@ -46,6 +49,11 @@ class TestLoginView(TestAuthViewBase):
 
     url = reverse('auth-login')
 
+    class AlternateLoginResponseSerializer(ModelSerializer):
+        class Meta:
+            model = User
+            fields = ('username',)
+
     def setUp(self):
         self.payload = dict(username=self.username, password=self.password)
 
@@ -64,6 +72,15 @@ class TestLoginView(TestAuthViewBase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(response._headers['location'][1], resolve_url(settings.LOGIN_REDIRECT_URL))
         self.assertIn('_auth_user_id', self.client.session)
+
+    def test_post_with_login_response_serializer(self):
+        with mock.patch('drf_advanced_auth.conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER'):
+            conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER = TestLoginView.AlternateLoginResponseSerializer
+            self._setup_user()
+            self.assertNotIn('_auth_user_id', self.client.session)
+            response = self.client.post(self.url, self.payload, format='json')
+            self.assertEquals(response.status_code, 200)
+            self.assertEquals(response.data, dict(username=self.username))
 
     def test_invalid_username(self):
         self._setup_user()

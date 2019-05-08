@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from . import conf
 from . import serializers
 from . import utils
 
@@ -48,6 +49,8 @@ class AuthViewSet(GenericViewSet):
         if user is None:
             return Response(_authentication_failure_error, status=status.HTTP_400_BAD_REQUEST)
         login(request, user)
+        if conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER:
+            return Response(conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER(user).data)
         return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
 
     @action(methods=['get', 'post'], detail=False)
