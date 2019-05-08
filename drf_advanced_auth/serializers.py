@@ -6,6 +6,9 @@ from rest_framework import serializers
 from . import utils
 
 
+_authentication_failure_error = dict(error='authentication error')
+
+
 class PasswordField(serializers.CharField):
 
     def __init__(self, *args, **kwargs):
@@ -58,6 +61,13 @@ class LoginSerializer(serializers.Serializer):
 
     username = serializers.CharField()
     password = PasswordField()
+
+    def validate(self, data):
+        user = authenticate(username=data['username'], password=data['password'])
+        if user is None:
+            raise serializers.ValidationError(_authentication_failure_error)
+        data['user'] = user
+        return data
 
 
 class ResetPasswordCompleteSerializer(NewPasswordBase):
