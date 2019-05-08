@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
@@ -17,7 +16,6 @@ from . import utils
 _success_response = dict(status='OK')
 _user_logged_in_error = dict(error='user logged in')
 _user_logged_out_error = dict(error='user logged out')
-_authentication_failure_error = dict(error='authentication error')
 _invalid_token_error = dict(error='invalid token')
 
 
@@ -45,12 +43,9 @@ class AuthViewSet(GenericViewSet):
             return Response(serializer.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = authenticate(username=serializer.data['username'], password=serializer.data['password'])
-        if user is None:
-            return Response(_authentication_failure_error, status=status.HTTP_400_BAD_REQUEST)
-        login(request, user)
+        login(request, serializer.validated_data['user'])
         if conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER:
-            return Response(conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER(user).data)
+            return Response(conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER(request.user).data)
         return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
 
     @action(methods=['get', 'post'], detail=False)
