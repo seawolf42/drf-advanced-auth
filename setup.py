@@ -26,7 +26,7 @@ test_dependencies = (
 
 setup(
     name='drf_advanced_auth',
-    version='0.2.3',
+    version='0.2.4',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',

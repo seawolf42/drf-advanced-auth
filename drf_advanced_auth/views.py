@@ -45,7 +45,7 @@ class AuthViewSet(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         login(request, serializer.validated_data['user'])
         if conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER:
-            return Response(conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER(request.user).data)
+            return Response(conf.LOGIN_SUCCESS_RESPONSE_SERIALIZER(request.user, context=dict(request=request)).data)
         return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
 
     @action(methods=['get', 'post'], detail=False)
