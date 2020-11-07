@@ -3,23 +3,24 @@
 # -------------------------------------
 
 
+PYTHON = env/bin/python
+PYTEST = pytest
+FLAKE8 = flake8
+TWINE = twine
+
 #
 # commands for artifact cleanup
 #
 
 .PHONY: clean
-clean: clean.build clean.pyc
-
-.PHONY: clean.build
-clean.build:
+clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info
-
-.PHONY: clean.pyc
-clean.pyc:
+	rm -rf .pytest_cache
 	find . -name '*.pyc' -delete
 	find . -name '*.pyo' -delete
+	find . -d -t f -name __pycache__ -exec rm -rf {} \;
 
 
 #
@@ -31,11 +32,11 @@ test: test.unittests test.flake8
 
 .PHONY: test.flake8
 test.flake8:
-	flake8 .
+	${FLAKE8} .
 
 .PHONY: test.unittests
 test.unittests:
-	PYTHONPATH=${PYTHONPATH} python runtests.py
+	${PYTEST} .
 
 
 #
@@ -44,9 +45,9 @@ test.unittests:
 
 .PHONY: sdist
 sdist: test
-	python setup.py sdist
-	python setup.py bdist_wheel
+	${PYTHON} setup.py sdist
+	${PYTHON}  setup.py bdist_wheel
 
 .PHONY: release
 release: clean sdist
-	twine upload dist/*
+	${TWINE} upload dist/*

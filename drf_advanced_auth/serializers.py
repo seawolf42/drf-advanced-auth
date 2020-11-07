@@ -13,8 +13,7 @@ class PasswordField(serializers.CharField):
 
     def __init__(self, *args, **kwargs):
         super(PasswordField, self).__init__(*args, **kwargs)
-        style = self.style
-        if 'input_type' in style:
+        if 'input_type' in self.style:
             raise Exception('do not override field_type for password fields')
         self.style['input_type'] = 'password'
 
@@ -25,7 +24,7 @@ NullSerializer = serializers.Serializer
 class NewPasswordBase(serializers.Serializer):
 
     new_password = PasswordField()
-    repeat_password = PasswordField()
+    # repeat_password = PasswordField()
 
     def validate_new_password(self, value):
         user = self.context['request'].user
