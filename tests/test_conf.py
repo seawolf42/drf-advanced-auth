@@ -1,17 +1,10 @@
-import sys
-
 from django.test import TestCase
 
 from drf_advanced_auth import conf
 
 from .utils import strings
 
-if sys.version_info[0] < 3:
-    # python 2
-    import mock
-else:
-    # python 3
-    from unittest import mock
+from unittest import mock
 
 
 @mock.patch('drf_advanced_auth.conf._SETTINGS')
