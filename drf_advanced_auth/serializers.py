@@ -25,7 +25,6 @@ NullSerializer = serializers.Serializer
 class NewPasswordBase(serializers.Serializer):
 
     new_password = PasswordField()
-    repeat_password = PasswordField()
 
     def validate_new_password(self, value):
         user = self.context['request'].user
@@ -34,11 +33,6 @@ class NewPasswordBase(serializers.Serializer):
         except ModelValidationError as e:
             raise serializers.ValidationError(e)
         return value
-
-    def validate(self, data):
-        if data['repeat_password'] != data['new_password']:
-            raise serializers.ValidationError('passwords mismatch')
-        return data
 
 
 class ChangePasswordSerializer(NewPasswordBase):
@@ -68,6 +62,9 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(_authentication_failure_error)
         data['user'] = user
         return data
+
+
+LogoutSerializer = serializers.Serializer
 
 
 class ResetPasswordCompleteSerializer(NewPasswordBase):

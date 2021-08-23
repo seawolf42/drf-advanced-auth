@@ -25,7 +25,7 @@ class AuthViewSet(GenericViewSet):
 
     serializer_for_action = dict(
         login=serializers.LoginSerializer,
-        logout=serializers.NullSerializer,
+        logout=serializers.LogoutSerializer,
         change_password=serializers.ChangePasswordSerializer,
         reset_password_request=serializers.ResetPasswordRequestSerializer,
         reset_password_complete=serializers.ResetPasswordCompleteSerializer,

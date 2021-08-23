@@ -1,16 +1,15 @@
 # DRF Advanced Authentication
 
-[Django REST Framework](https://www.django-rest-framework.org/) provides just about everything needed to turn your Django app into a REST-based web application. One area that DRF lacks functionality is in account management, specifically all the non-happy path scenarios related to authentication, namely password changes and password resets. This module aims to simplify setting up a full auth subsystem for your REST application.
+[Django REST Framework](https://www.django-rest-framework.org/) provides just about everything needed to turn your Django app into a REST-based web application. One area that DRF lacks functionality is in the non-happy path scenarios related to authentication, namely password changes and password resets. This module aims to simplify setting up a full auth subsystem for your REST application.
 
-The funcitons provided by this package are:
+The functions provided by this package are:
 
-* login: an endpoint for authenticating a user
-* logout: an endpoint for ending a user's session
-* change password: an endpoint for changing the password of a logged-in user
-* reset password: two endpoints that togehter can be used to reset the password of a logged-out user (lost password, etc)
+-   login: an endpoint for authenticating a user
+-   logout: an endpoint for ending a user's session
+-   change password: an endpoint for changing the password of a logged-in user
+-   reset password: two endpoints that together can be used to reset the password of a logged-out user (lost password, etc)
 
 **Note:** This package is a work in progress (that's why it's not yet at version 1.0). I am active seeking contributions to help with making it more usable, see ["Contributing"](#contributing) below.
-
 
 ## Installation
 
@@ -39,11 +38,9 @@ urlpatterns = [
 ]
 ```
 
-
 ## Usage
 
 (IN PROGRESS)
-
 
 ## Sample App
 
@@ -57,16 +54,16 @@ $ python manage.py runserver
 
 This app has the following endpoints (assuming they are under the `auth` prefix as shown above):
 
-* `/auth/login/`
-* `/auth/logout/`
-* `/auth/change_password/`
-* `/auth/reset_password_request/`
-* `/auth/reset_password_complete/`
+-   `/auth/login/`
+-   `/auth/logout/`
+-   `/auth/change_password/`
+-   `/auth/reset_password_request/`
+-   `/auth/reset_password_complete/`
 
 The username for the admin user is `admin`, and the password is `pass`.
 
-
 <a name="contributing"></a>
+
 ## Contributing
 
 I am actively seeking contributions to this package. Check the "Issues" section of the repository for my current hit list.
