@@ -1,7 +1,6 @@
 import datetime
 import pytz
 import re
-import sys
 
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -21,12 +20,7 @@ from drf_advanced_auth import conf
 
 from .utils import strings
 
-if sys.version_info[0] < 3:
-    # python 2
-    import mock
-else:
-    # python 3
-    from unittest import mock
+from unittest import mock
 
 
 User = get_user_model()
