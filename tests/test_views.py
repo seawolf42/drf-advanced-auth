@@ -70,7 +70,7 @@ class TestLoginView(TestAuthViewBase):
         self.assertNotIn('_auth_user_id', self.client.session)
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(response._headers['location'][1], resolve_url(settings.LOGIN_REDIRECT_URL))
+        self.assertEquals(response.headers['location'], resolve_url(settings.LOGIN_REDIRECT_URL))
         self.assertIn('_auth_user_id', self.client.session)
 
     def test_post_with_login_response_serializer(self):
@@ -132,7 +132,6 @@ class TestChangePasswordView(TestAuthViewBase):
         self.payload = dict(
             current_password=self.password,
             new_password=self.valid_password,
-            repeat_password=self.valid_password,
         )
 
     def test_get(self):
@@ -158,16 +157,8 @@ class TestChangePasswordView(TestAuthViewBase):
     def test_invalid_password(self, mock_validate_password):
         self._setup_user()
         self.client.force_login(self.user)
-        self.payload = dict(password=strings[0], repeat_password=strings[0])
+        self.payload = dict(password=strings[0])
         mock_validate_password.side_effect = ModelValidationError([])
-        response = self.client.post(self.url, self.payload, format='json')
-        self.assertEquals(response.status_code, 400)
-        self.assertIsNotNone(authenticate(username=self.username, password=self.password))
-
-    def test_multifield_password_mismatch(self):
-        self._setup_user()
-        self.client.force_login(self.user)
-        self.payload['repeat_password'] += strings[0]
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 400)
         self.assertIsNotNone(authenticate(username=self.username, password=self.password))
@@ -254,7 +245,6 @@ class TestAuthViewResetPasswordComplete(TestAuthViewResetPasswordBase):
         super(TestAuthViewResetPasswordComplete, self)._setup_user(include_token=True)
         self.payload.update(dict(
             new_password=self.valid_password,
-            repeat_password=self.valid_password,
         ))
 
     def test_get(self):
@@ -269,7 +259,7 @@ class TestAuthViewResetPasswordComplete(TestAuthViewResetPasswordBase):
         self._setup_user()
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(response._headers['location'][1], resolve_url(settings.LOGIN_REDIRECT_URL))
+        self.assertEquals(response.headers['location'], resolve_url(settings.LOGIN_REDIRECT_URL))
         self.assertIn('_auth_user_id', self.client.session)
 
     def test_invalid_token(self):
@@ -291,10 +281,3 @@ class TestAuthViewResetPasswordComplete(TestAuthViewResetPasswordBase):
         response = self.client.post(self.url, self.payload, format='json')
         self.assertEquals(response.status_code, 400)
         assert authenticate(username=self.user.username, password=self.password) is not None
-
-    def test_multifield_password_mismatch(self):
-        self._setup_user()
-        self.payload['repeat_password'] += strings[0]
-        response = self.client.post(self.url, self.payload, format='json')
-        self.assertEquals(response.status_code, 400)
-        self.assertIsNotNone(authenticate(username=self.user.username, password=self.password))
